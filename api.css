@@ -46,7 +46,7 @@ body {
     padding: 10px 16px;
     border-radius: 100px;
     margin: 0 4px;
-    font-size: 12px;
+    font-size: 14px;
     font-weight: 500;
     cursor: pointer;
     font-family: var(--font-general);
@@ -60,17 +60,32 @@ body {
     width: 100dvw;
   }
 
-  .trending-posters_container {
+  .trending-container,
+  .popular-container,
+  .now-playing-container{
+    display: flex;
+    flex-direction: column;
+    padding-left: 16px;
+  }
+
+  .trending-posters_container,
+  .popular-posters_container,
+  .now-playing-posters_container {
     display: flex;
     overflow-x: scroll;
     overflow-y: hidden;
-    padding: 0 8px 16px 16px;
+    white-space: nowrap;
+    scroll-behavior: smooth;
+    padding: 0 8px 0 0;
+    &::-webkit-scrollbar{
+      display: none;
+    }
   }
 
   .trending-title_container{
     display: flex;
     align-items: center;
-    margin-left: 16px;
+    /* margin-left: 16px; */
     margin-bottom: 16px;
   }
 
@@ -89,23 +104,22 @@ body {
     text-align: center;
     font-size: 12px;
   }
-
-  .trending-posters_container .trending-poster {
-    margin-right: 8px;
-  }
-  .trending-poster {
-    height: 150px;
-    min-height: 150px;
-    max-height: 150px;
-    width: 100px;
-    min-width: 100px;
-    max-width: 100px;
+  .trending-poster,
+  .popular-poster,
+  .now-playing-poster {
+    height: 230px;
+    min-height: 230px;
+    max-height: 230px;
+    width: 160px;
+    min-width: 160px;
+    max-width: 160px;
     border-radius: 8px;
+    margin-right: 8px;
   }
 
   .divider{
     width: 95dvw;
-    margin: 16px auto;
+    margin: 24px auto;
     border: 1px solid var(--color-neutral-variant20);
     border-radius: 200px;
   }
@@ -116,6 +130,10 @@ main {
 
 .nav-icons {
   color: var(--color-on-surface);
+}
+
+.icons-container a{
+  color: transparent;
 }
 
 .posters-section {
