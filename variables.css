@@ -5,5 +5,7 @@
   --color-on-primary: #ffffff;
   --color-primary80: #B690F4;
   --color-neutral-variant20: #3C3941;
+  --color-neutral-variant60: #98949E;
+  --color-neutral-variant80: #CBC9CF;
   --font-general: 'system-ui', sans-serif;
 }
