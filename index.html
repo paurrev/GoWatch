@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="./styles/style.css">
+  
+  <title>Document</title>
+</head>
+
+<body>
+  <nav class="navbar">
+    <div class="icons-container">
+      <a href="">
+        <svg class="nav-icons menu-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+          stroke-width="3" stroke-linecap="round" stroke-linejoin="round"
+          class="icon icon-tabler icons-tabler-outline icon-tabler-align-left">
+          <path d="M0 0h24v24H0z" stroke="none" />
+          <path d="M4 6h16M4 12h10M4 18h14" />
+        </svg>
+      </a>
+      <a href="">
+        <svg class="nav-icons search-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+          fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"
+          class="icon icon-tabler icons-tabler-outline icon-tabler-search">
+          <path d="M0 0h24v24H0z" stroke="none" />
+          <path d="M3 10a7 7 0 1 0 14 0 7 7 0 1 0-14 0M21 21l-6-6" />
+        </svg>
+      </a>
+    </div>
+    <a class="logo-principal">
+      <img class="logo-nav" src="./images/logo.svg" alt="logo Go Watch">
+    </a>
+    <a href="">
+      <svg class="nav-icons bookmark-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor"
+        class="icon icon-tabler icons-tabler-filled icon-tabler-bookmark">
+        <path d="M0 0h24v24H0z" fill="none" />
+        <path
+          d="M14 2a5 5 0 0 1 5 5v14a1 1 0 0 1-1.555.832L12 18.202l-5.444 3.63a1 1 0 0 1-1.55-.72L5 21V7a5 5 0 0 1 5-5h4z" />
+      </svg>
+    </a>
+  </nav>
+  <main id="main-page">
+    <section class="index-section inactive">
+      <section class="buttons-categories buttons-categories--main">
+        <button class="buttons-categories__button buttons-categories__button--popular">Popular</button>
+        <button class="buttons-categories__button buttons-categories__button--now-playing">Now Playing</button>
+        <button class="buttons-categories__button buttons-categories__button--top-rated">Top Rated</button>
+      </section>
+      <header class="backdrop">
+        <img class="backdrop__img" src="https://image.tmdb.org/t/p/original/usrFVMC4tbOzgIuojMo245QLtX2.jpg" alt="">
+      </header>
+      
+      <section class="trending">
+        <header class="trending__title-container">
+          <h2 class="trending__title">Trending</h2>
+          <div class="trending__day">Today</div>
+        </header>
+        <article class="trending-posters_container trending-container">
+        </article>
+      </section>
+      <hr class="divider">
+      <section class="popular">
+        <header class="popular__title-container">
+          <h2 class="popular__title">Popular</h2>
+        </header>
+        <article class="popular-posters_container popular-container">
+        </article>
+      </section>
+      <hr class="divider">
+      <section class="now-playing">
+        <header class="now-playing__title-container">
+          <h2 class="now-playing__title">Now Playing</h2>
+        </header>
+        <article class="now-playing-posters_container now-playing-container">
+        </article>
+      </section>
+    </section>
+    <section class="buttons-categories--now-playing inactive">
+      <article class="buttons-categories ">
+        <button class="buttons-categories__button buttons-categories__button--popular">Popular</button>
+        <button class="buttons-categories__button buttons-categories__button--now-playing">Now Playing</button>
+        <button class="buttons-categories__button buttons-categories__button--top-rated">Top Rated</button>
+        <button class="buttons-categories__button">Action</button>
+        <button class="buttons-categories__button">Adventure</button>
+      </article>
+
+      <article class="now-playing-container--main">
+
+      </article>
+    </section>
+  </main>
+</body>
+<script type="module" src="./src/main.js"></script>
+<script type="module" src="./src/routes.js"></script>
+
+</html>
