@@ -1,19 +1,26 @@
+import { TOKEN_AUTH } from './secrets.js';
 import { ENDPOINTS_MOVIE } from './endpoints.js';
-import { TOKEN_AUTH } from "./secrets.js";
+import { navigator } from './routes.js';
+import {
+  trendingContainer,
+  popularContainer,
+  nowPlayingContainer,
+  posterContainer,
+  test,
+  nowPlayingContainerMain,
+  
+} from './node.js';
 
-
-
-const posterSection = document.querySelector('.posters-section');
-const trendingSection = document.querySelector('.trending-posters_container');
-const popularSection = document.querySelector('.popular-posters_container');
-const nowPlayingSection = document.querySelector('.now-playing-posters_container');
+function buttonPopularClick() {
+  location.hash = '#popular';
+}
 
 let isChecked;
 let labelMovie;
 
 const imgBaseURL = 'https://image.tmdb.org/t/p/w500/';
 
-async function getMovies() {
+export async function getMovies() {
   const response = await fetch(ENDPOINTS_MOVIE.getAllMovies);
   const data = await response.json();
 
@@ -21,7 +28,7 @@ async function getMovies() {
   // console.log(dataMovie.length);
   if (response.status === 200) {
     // insertPosters(dataMovie);
-    console.log(dataMovie);
+    // console.log(dataMovie);
   } else {
     console.error(`Hubo un error ${response.status}`);
   }
@@ -35,19 +42,22 @@ async function getMoviesTrending() {
   // console.log(dataMovie.length);
   if (response.status === 200) {
     insertMoviesTrending(dataMovie);
-    console.log(dataMovie);
+    // console.log(dataMovie);
   } else {
     console.error(`Hubo un error ${response.status}`);
   }
 }
 
 function insertMoviesTrending(data) {
+  trendingContainer.innerHTML = '';
+
   data.forEach((movie) => {
     const imgPoster = document.createElement('img');
     imgPoster.classList.add('trending-poster');
+    imgPoster.classList.add('trending-poster--main');
     imgPoster.src = imgBaseURL + movie.poster_path;
 
-    trendingSection.appendChild(imgPoster);
+    trendingContainer.appendChild(imgPoster);
   });
 }
 
@@ -55,49 +65,66 @@ async function getMoviesPopular() {
   const response = await fetch(ENDPOINTS_MOVIE.getMoviesPopular);
   const data = await response.json();
 
-  console.log(data);
+  // console.log(data);
   const dataMovie = data.results;
   // console.log(dataMovie.length);
   if (response.status === 200) {
-    insertMoviesPopular(dataMovie)
-    console.log(dataMovie);
+    insertMoviesPopular(dataMovie);
+    // console.log(dataMovie);
   } else {
     console.error(`Hubo un error ${response.status}`);
   }
 }
 
 function insertMoviesPopular(data) {
+  popularContainer.innerHTML = '';
+
   data.forEach((movie) => {
     const imgPoster = document.createElement('img');
     imgPoster.classList.add('popular-poster');
+    imgPoster.classList.add('popular-poster--main');
     imgPoster.src = imgBaseURL + movie.poster_path;
 
-    popularSection.appendChild(imgPoster);
+    popularContainer.appendChild(imgPoster);
   });
 }
 
-async function getMoviesNowPlaying() {
+export async function getMoviesNowPlaying() {
   const response = await fetch(ENDPOINTS_MOVIE.getMoviesNowPlaying);
   const data = await response.json();
 
-  console.log(data);
   const dataMovie = data.results;
-  // console.log(dataMovie.length);
   if (response.status === 200) {
-    insertMoviesNowPlaying(dataMovie)
-    console.log(dataMovie);
+    insertMoviesNowPlayingSection(dataMovie)
+    insertMoviesNowPlayingMain(dataMovie);
   } else {
     console.error(`Hubo un error ${response.status}`);
   }
 }
 
-function insertMoviesNowPlaying(data) {
+function insertMoviesNowPlayingMain(data) {
+  nowPlayingContainer.innerHTML = '';
+
   data.forEach((movie) => {
     const imgPoster = document.createElement('img');
     imgPoster.classList.add('now-playing-poster');
+    imgPoster.classList.add('now-playing-poster--main');
     imgPoster.src = imgBaseURL + movie.poster_path;
+    nowPlayingContainer.appendChild(imgPoster);
+  });
+}
 
-    nowPlayingSection.appendChild(imgPoster);
+function insertMoviesNowPlayingSection(data) {
+  nowPlayingContainerMain.innerHTML = '';
+
+  data.forEach((movie) => {
+    const imgPoster = document.createElement('img');
+    const divPoster = document.createElement('div')
+    imgPoster.classList.add('now-playing-poster');
+    imgPoster.src = imgBaseURL + movie.poster_path;
+    divPoster.classList.add('now-playing--container')
+    divPoster.appendChild(imgPoster);
+    nowPlayingContainerMain.appendChild(divPoster)
   });
 }
 
@@ -174,79 +201,17 @@ async function removeMoviesFavorites(id) {
   const data = await response.json();
 }
 
-// function insertPosters(data) {
-//   data.forEach((movie) => {
-//     const articleMovie = document.createElement('article');
-//     articleMovie.classList.add('poster-box');
+window.addEventListener('load', () => {
+  navigator();
+});
 
-//     const imgMovie = document.createElement('img');
-//     imgMovie.src = imgBaseURL + movie.poster_path;
-//     imgMovie.classList.add('poster-img');
-
-//     labelMovie = document.createElement('label');
-//     labelMovie.className = 'ui-bookmark';
-
-//     const input = document.createElement('input');
-//     input.setAttribute('type', 'checkbox');
-//     input.className = 'input-heart';
-//     input.name = 'favorite';
-//     input.id = `input-${movie.id}`;
-
-//     input.addEventListener('change', (e) => {
-//       isChecked = e.target.checked;
-//       console.log(isChecked);
-
-//       if (isChecked) {
-//         isChecked = true;
-//         localStorage.setItem(`buttonSelected-${movie.id}`, true);
-//         labelMovie.classList.add('checked');
-//         console.log('cambio el local');
-//       } else {
-//         isChecked = false;
-//         localStorage.removeItem(`buttonSelected-${movie.id}`);
-//       }
-//     });
-
-//     if (localStorage.getItem(`buttonSelected-${movie.id}`) === 'true') {
-//       input.checked = true;
-//       labelMovie.classList.add('checked');
-//     }
-
-//     const div = document.createElement('div');
-//     div.className = 'bookmark';
-
-//     const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
-//     svg.setAttribute('viewBox', '0 0 16 16');
-//     svg.setAttribute('class', 'svg-heart');
-//     svg.setAttribute('height', '25');
-//     svg.setAttribute('width', '25');
-//     svg.setAttribute('xmlns', 'http://www.w3.org/2000/svg');
-
-//     const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
-//     path.setAttribute(
-//       'd',
-//       'M8 1.314C12.438-3.248 23.534 4.735 8 15-7.534 4.736 3.562-3.248 8 1.314'
-//     );
-//     path.setAttribute('fill-rule', 'evenodd');
-
-//     svg.appendChild(path);
-//     div.appendChild(svg);
-//     labelMovie.appendChild(input);
-//     labelMovie.appendChild(div);
-
-//     posterSection.appendChild(articleMovie);
-//     articleMovie.appendChild(imgMovie);
-//     articleMovie.appendChild(labelMovie);
-
-//     const button = document.getElementById(`input-${movie.id}`);
-//     button.addEventListener('click', () => changeMoviesFavorites(isChecked, movie.id));
-
-//   });
-// }
+window.addEventListener('hashchange', () => {
+  navigator();
+});
 
 getMovies();
 getMoviesTrending();
 getMoviesPopular();
-getMoviesNowPlaying()
+// getMoviesNowPlaying();
 // getMoviesFavorites();
 // getGenresMovies()
