@@ -1,10 +1,13 @@
 :root {
   --color-surface: #050c14;
   --color-on-surface: #cccccc;
+  --color-surface-high: #2B2B2B;
   --color-primary: #420f95;
   --color-on-primary: #ffffff;
   --color-primary80: #B690F4;
   --color-neutral-variant20: #3C3941;
+  --color-neutral-variant40: #65616B;
+  --color-neutral-variant50: #848089;
   --color-neutral-variant60: #98949E;
   --color-neutral-variant80: #CBC9CF;
   --font-general: 'system-ui', sans-serif;

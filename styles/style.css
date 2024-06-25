@@ -1,0 +1,247 @@
+@import url('./reset.css');
+@import url('./variables.css');
+
+body {
+  background-color: var(--color-surface);
+  box-sizing: border-box;
+  margin: 0;
+  font-family: var(--font-general);
+}
+
+@media (320px <= width <= 479px) {
+  .navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 56px;
+    padding: 0 16px;
+    align-items: center;
+    margin-bottom: 8px;
+  }
+  .nav-icons {
+    min-width: 24px;
+  }
+  .menu-icon {
+    margin-right: 4px;
+  }
+
+  .logo-nav {
+    min-height: 22px;
+    padding-right: 24px;
+  }
+
+  .trending,
+  .popular,
+  .now-playing {
+    display: flex;
+    flex-direction: column;
+    padding-left: 16px;
+  }
+
+  .trending-posters_container,
+  .popular-posters_container,
+  .now-playing-posters_container {
+    display: flex;
+    overflow-x: scroll;
+    overflow-y: hidden;
+    white-space: nowrap;
+    scroll-behavior: smooth;
+    padding: 0 8px 0 0;
+    &::-webkit-scrollbar {
+      display: none;
+    }
+  }
+
+  .trending__title-container,
+  .popular__title-container,
+  .now-playing__title-container {
+    display: flex;
+    align-items: center;
+    /* margin-left: 16px; */
+    margin-bottom: 16px;
+  }
+
+  .trending__title,
+  .popular__title,
+  .now-playing__title {
+    margin-right: 16px;
+    text-align: center;
+    color: var(--color-on-primary);
+    font-size: 1.5rem;
+  }
+
+  .trending__day {
+    color: var(--color-primary80);
+    border: var(--color-primary80) 1px solid;
+    padding: 4px 10px;
+    border-radius: 50px;
+    text-align: center;
+    font-size: 12px;
+  }
+
+  .now-playing--container,
+  .categories-poster {
+    width: 100%;
+    max-width: 100%;
+    height: 100%;
+  }
+
+  .trending-poster,
+  .popular-poster,
+  .now-playing-poster,
+  .categories-poster {
+    width: 100%;
+    border-radius: 8px;
+    min-width: 150px;
+    max-width: 100%;
+  }
+
+  .buttons-categories--now-playing .buttons-categories {
+    display: flex;
+    padding: 0 8px 16px 8px;
+    overflow-x: scroll;
+    overflow-y: hidden;
+    white-space: nowrap;
+    align-content: flex-start;
+    justify-content: flex-start;
+  }
+
+  .section-now-playing .now-playing-container--main,
+  .section-categories .categories-container--main {
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    padding: 0 16px;
+  }
+
+  .divider {
+    width: 95dvw;
+    margin: 24px auto;
+    border: 1px solid var(--color-neutral-variant20);
+    border-radius: 200px;
+  }
+}
+main {
+  width: 100%;
+}
+
+.inactive {
+  display: none;
+}
+
+.navbar {
+  display: flex;
+  position: sticky;
+  top: 0px;
+  background: var(--color-surface);
+}
+
+.logo-nav {
+  width: 160px;
+  flex-shrink: 0;
+  cursor: pointer;
+}
+
+.nav-icons {
+  color: var(--color-on-surface);
+}
+
+.icons-container a {
+  color: transparent;
+}
+
+.trending-poster,
+.popular-poster,
+.now-playing-poster,
+.categories-poster {
+  width: 100%;
+  border-radius: 8px;
+  min-width: 150px;
+  max-width: 100%;
+}
+
+.now-playing-poster--main,
+.popular-poster--main,
+.trending-poster--main {
+  margin-right: 10px;
+}
+
+.now-playing--container,
+.categories--container {
+  width: 100%;
+  max-width: 100%;
+  height: 100%;
+}
+
+.backdrop__img {
+  width: 100%;
+}
+
+.buttons-categories--main {
+  justify-content: center;
+}
+
+.buttons-categories-container {
+  display: flex;
+  margin-bottom: 16px;
+  overflow-x: scroll;
+  overflow-y: hidden;
+  justify-content: flex-start;
+  white-space: nowrap;
+}
+
+.buttons-categories-container::-webkit-scrollbar{
+  display: none;
+}
+
+.now-playing-container--main,
+.categories-container--main {
+  display: grid;
+  place-items: center;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  grid-gap: 16px 16px;
+  padding: 0 64px;
+}
+
+.buttons-categories__button {
+  text-wrap: nowrap;
+  background: var(--color-primary);
+  border: transparent;
+  color: var(--color-on-primary);
+  padding: 10px 16px;
+  border-radius: 100px;
+  margin: 0 4px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  font-family: var(--font-general);
+}
+
+p {
+  color: #f2dbae7a;
+  font-weight: 500;
+  font-size: 1rem;
+  text-align: center;
+  margin: 0 16px;
+  cursor: pointer;
+  transition: background 0.3s ease;
+  &:hover {
+    color: #f2dbae;
+  }
+}
+
+footer {
+  display: flex;
+  justify-content: center;
+  margin: 32px 0;
+}
+
+.button-more {
+  width: auto;
+  background: #a60303;
+  border: transparent;
+  color: #f2dbae;
+  padding: 10px;
+  font-size: 16px;
+  font-weight: 700;
+  border-radius: 10px;
+  cursor: pointer;
+}

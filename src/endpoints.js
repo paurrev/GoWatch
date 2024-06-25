@@ -9,6 +9,7 @@ export const ENDPOINTS_MOVIE = {
   getMoviesFavorites: `https://api.themoviedb.org/3/account/${account_id}/favorite/movies?api_key=${API_KEY}`,
   addMoviesFavorites: `https://api.themoviedb.org/3/account/${account_id}/favorite?api_key=${API_KEY}`,
   getGenresMovies: `https://api.themoviedb.org/3/genre/movie/list?api_key=${API_KEY}`,
+  getDiscoverMovies: (id) => `https://api.themoviedb.org/3/discover/movie?api_key=${API_KEY}&with_genres=${id}`,
 };
 
 export const ENDPOINTS_TV = {

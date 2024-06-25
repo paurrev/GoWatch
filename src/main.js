@@ -6,19 +6,18 @@ import {
   popularContainer,
   nowPlayingContainer,
   posterContainer,
-  test,
   nowPlayingContainerMain,
-  
+  buttonsContainer,
+  buttonsContainerMain,
+  categoriesContainer,
+  buttonsContainerGenres,
 } from './node.js';
 
-function buttonPopularClick() {
-  location.hash = '#popular';
-}
-
-let isChecked;
-let labelMovie;
-
 const imgBaseURL = 'https://image.tmdb.org/t/p/w500/';
+
+export function resetScroll() {
+  window.scrollTo(0, 0);
+}
 
 export async function getMovies() {
   const response = await fetch(ENDPOINTS_MOVIE.getAllMovies);
@@ -95,37 +94,22 @@ export async function getMoviesNowPlaying() {
 
   const dataMovie = data.results;
   if (response.status === 200) {
-    insertMoviesNowPlayingSection(dataMovie)
-    insertMoviesNowPlayingMain(dataMovie);
+    // insertMoviesNowPlayingSection(dataMovie)
+    // insertMoviesNowPlayingMain(dataMovie);
+    insertMoviesBillboard(
+      dataMovie,
+      nowPlayingContainer,
+      'now-playing-poster now-playing-poster--main'
+    );
+    insertMoviesBillboard(
+      dataMovie,
+      nowPlayingContainerMain,
+      'now-playing-poster',
+      'now-playing--container'
+    );
   } else {
     console.error(`Hubo un error ${response.status}`);
   }
-}
-
-function insertMoviesNowPlayingMain(data) {
-  nowPlayingContainer.innerHTML = '';
-
-  data.forEach((movie) => {
-    const imgPoster = document.createElement('img');
-    imgPoster.classList.add('now-playing-poster');
-    imgPoster.classList.add('now-playing-poster--main');
-    imgPoster.src = imgBaseURL + movie.poster_path;
-    nowPlayingContainer.appendChild(imgPoster);
-  });
-}
-
-function insertMoviesNowPlayingSection(data) {
-  nowPlayingContainerMain.innerHTML = '';
-
-  data.forEach((movie) => {
-    const imgPoster = document.createElement('img');
-    const divPoster = document.createElement('div')
-    imgPoster.classList.add('now-playing-poster');
-    imgPoster.src = imgBaseURL + movie.poster_path;
-    divPoster.classList.add('now-playing--container')
-    divPoster.appendChild(imgPoster);
-    nowPlayingContainerMain.appendChild(divPoster)
-  });
 }
 
 async function getMoviesFavorites() {
@@ -137,11 +121,9 @@ async function getMoviesFavorites() {
     },
   });
   const data = await response.json();
-  // console.log('Favorite');
-  // console.log(data.results);
 }
 
-async function getGenresMovies() {
+export async function getGenresMovies() {
   const response = await fetch(ENDPOINTS_MOVIE.getGenresMovies, {
     method: 'GET',
     headers: {
@@ -151,7 +133,70 @@ async function getGenresMovies() {
   });
 
   const data = await response.json();
+  const dataGenres = data.genres;
+  insertGenres(dataGenres, buttonsContainer);
+  insertGenres(dataGenres, buttonsContainerMain);
+  insertGenres(dataGenres, buttonsContainerGenres);
 }
+
+function insertGenres(genres, buttonContainer) {
+  genres.forEach((genre) => {
+    
+    const genreOption = document.createElement('button');
+    const nameGenre = genre.name;
+    genreOption.innerText = nameGenre;
+    const nameGenreLowercase = nameGenre.toLowerCase().split(' ').join('-');
+    genreOption.addEventListener('click', () => {
+      location.hash = `category=${genre.id}-${nameGenreLowercase}`
+    })
+
+    genreOption.className = `buttons-categories__button buttons-categories__button--${nameGenreLowercase}`;
+    buttonContainer.appendChild(genreOption);
+    
+  });
+}
+
+export async function getGenresMoviesFilter(id) {
+  const url = ENDPOINTS_MOVIE.getDiscoverMovies(id);
+  const response = await fetch(url, {
+    method: 'GET',
+    headers: {
+      accept: 'application/json',
+      Authorization: TOKEN_AUTH,
+    },
+  });
+
+  const data = await response.json();
+  const movie = data.results
+
+  insertMoviesBillboard(
+    movie,
+    categoriesContainer,
+    'now-playing-poster',
+    'now-playing--container'
+  );
+}
+
+function insertMoviesBillboard(data, movieContainer, classImg, classId = null) {
+  movieContainer.innerHTML = null;
+
+  data.forEach((movie) => {
+    const imgPoster = document.createElement('img');
+    const imageClasses = classImg.split(' ');
+    imageClasses.forEach((clss) => imgPoster.classList.add(clss));
+    imgPoster.src = imgBaseURL + movie.poster_path;
+
+    if (classId) {
+      const divPoster = document.createElement('div');
+      divPoster.classList.add(classId);
+      divPoster.appendChild(imgPoster);
+      movieContainer.appendChild(divPoster);
+    } else {
+      movieContainer.appendChild(imgPoster);
+    }
+  });
+}
+
 
 function changeMoviesFavorites(isChecked, id) {
   if (isChecked) {
@@ -207,6 +252,7 @@ window.addEventListener('load', () => {
 
 window.addEventListener('hashchange', () => {
   navigator();
+  buttonsContainerGenres.scrollLeft = 0
 });
 
 getMovies();
@@ -214,4 +260,3 @@ getMoviesTrending();
 getMoviesPopular();
 // getMoviesNowPlaying();
 // getMoviesFavorites();
-// getGenresMovies()
