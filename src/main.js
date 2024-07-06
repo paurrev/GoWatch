@@ -28,6 +28,9 @@ import {
   popularContainerMain,
   searchTrendingMovies,
   searchSectionTrending,
+  genreContainerMain,
+  genreContainer,
+  navbarGenres,
 } from './node.js';
 
 const imgBaseURL = 'https://image.tmdb.org/t/p/w500/';
@@ -58,10 +61,8 @@ export async function getMovies() {
   const data = await response.json();
 
   const dataMovie = data.results;
-  // console.log(dataMovie.length);
   if (response.status === 200) {
-    // insertPosters(dataMovie);
-    // console.log(dataMovie);
+
   } else {
     console.error(`Hubo un error ${response.status}`);
   }
@@ -74,6 +75,7 @@ async function getMoviesTrending() {
   const dataMovie = data.results;
   // console.log(dataMovie.length);
   if (response.status === 200) {
+    console.log(dataMovie);
     insertMoviesBillboard(
       dataMovie,
       trendingContainer,
@@ -187,6 +189,13 @@ document.addEventListener('click', (event) => {
   } else {
     navbarInputSectionContainer.style.borderRadius = '10px 10px 0px 0px';
   }
+
+  if (
+    !genreContainer.contains(event.target) &&
+    !navbarGenres.contains(event.target)
+  ) {
+    genreContainer.classList.add('inactive');
+  }
 });
 
 export async function getGenresMovies() {
@@ -200,22 +209,39 @@ export async function getGenresMovies() {
 
   const data = await response.json();
   const dataGenres = data.genres;
-  insertGenres(dataGenres, buttonsContainer);
-  insertGenres(dataGenres, buttonsContainerMain);
-  insertGenres(dataGenres, buttonsContainerGenres);
+  insertGenres(dataGenres, genreContainerMain);
 }
 
 function insertGenres(genres, buttonContainer) {
-  genres.forEach((genre) => {
-    const genreOption = document.createElement('button');
-    const nameGenre = genre.name;
-    genreOption.innerText = nameGenre;
-    const nameGenreLowercase = nameGenre.toLowerCase().split(' ').join('-');
-    genreOption.addEventListener('click', () => {
-      location.hash = `category=${genre.id}-${nameGenreLowercase}`;
-    });
+  buttonContainer.innerHTML = ''
 
-    genreOption.className = `buttons-categories__button buttons-categories__button--${nameGenreLowercase}`;
+  genres.forEach((genre) => {
+    const nameGenre = genre.name;
+    const labelGenre = document.createElement('label');
+    labelGenre.className = 'genre-label';
+    const inputGenre = document.createElement('input');
+    inputGenre.className = 'genre-radio';
+    inputGenre.type = 'radio';
+    inputGenre.name = 'value-radio';
+    inputGenre.value = nameGenre;
+    const divGenreRadioDesign = document.createElement('div');
+    divGenreRadioDesign.className = 'genre--radio-design';
+    const divGenreLabelText = document.createElement('div');
+    divGenreLabelText.className = 'genre--label-text';
+    divGenreLabelText.innerText = nameGenre;
+
+    labelGenre.appendChild(inputGenre)
+    labelGenre.appendChild(divGenreRadioDesign)
+    labelGenre.appendChild(divGenreLabelText)
+    buttonContainer.appendChild(labelGenre)
+    
+    const nameGenreLowercase = nameGenre.toLowerCase().split(' ').join('-');
+    labelGenre.addEventListener('click', (event) => {
+      
+      location.hash = `category=${genre.id}-${nameGenreLowercase}`;
+      inputGenre.checked = true;
+      
+    });
   });
 }
 
@@ -235,8 +261,8 @@ export async function getGenresMoviesFilter(id) {
   insertMoviesBillboard(
     movie,
     categoriesContainer,
-    'now-playing-poster',
-    'now-playing--container'
+    'now-playing-poster billboard-container--poster',
+    'now-playing--container billboard-poster'
   );
 }
 
@@ -305,6 +331,7 @@ export async function getMovieById(id) {
 }
 
 function insertGetMoviesById(movie) {
+  
   const divBackdrop = document.createElement('div');
   divBackdrop.classList.add('backdrop-div');
 
@@ -376,7 +403,6 @@ window.addEventListener('load', () => {
 
 window.addEventListener('hashchange', () => {
   navigator();
-  buttonsContainerGenres.scrollLeft = 0;
 });
 
 getMovies();

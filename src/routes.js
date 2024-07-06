@@ -25,6 +25,12 @@ import {
   searchSectionTitle,
   sectionPopular,
   searchSectionTrending,
+  navbarPopular,
+  navbarHome,
+  navbarNowPlaying,
+  navbarTopRated,
+  navbarGenres,
+  genreContainer,
 } from './node.js';
 
 // Función genérica para agregar event listeners a los botones
@@ -67,6 +73,10 @@ searchInput.addEventListener('input', (event) => {
   const [_, movieId] = location.hash.split('=');
 });
 
+navbarGenres.addEventListener('click', () => {
+  genreContainer.classList.toggle('inactive')
+})
+
 const routes = [
   { name: 'home', hashstart: '#home', render: homePage },
   { name: 'trends', hashstart: '#trends', render: trendsPage },
@@ -100,6 +110,11 @@ function homePage() {
   categoriesSection.classList.add('inactive');
   sectionPopular.classList.add('inactive');
   movieDetailSection.classList.add('inactive');
+  navbarHome.classList.add('navbar-active');
+  navbarPopular.classList.remove('navbar-active');
+  navbarNowPlaying.classList.remove('navbar-active');
+  navbarTopRated.classList.remove('navbar-active');
+  navbarGenres.classList.remove('navbar-active');
   getGenresMovies();
   getMoviesNowPlaying();
   resetScroll();
@@ -117,6 +132,12 @@ function nowPlayingPage() {
   movieDetailSection.classList.add('inactive');
   sectionPopular.classList.add('inactive');
   sectionNowPlaying.classList.remove('inactive');
+
+  navbarHome.classList.remove('navbar-active');
+  navbarPopular.classList.remove('navbar-active');
+  navbarNowPlaying.classList.add('navbar-active');
+  navbarTopRated.classList.remove('navbar-active');
+  navbarGenres.classList.remove('navbar-active');
   getGenresMovies();
   getMoviesNowPlaying();
   resetScroll();
@@ -126,15 +147,22 @@ function categoriesPage() {
   console.log('categoriesPage');
   indexSection.classList.add('inactive');
   sectionNowPlaying.classList.add('inactive');
+  sectionPopular.classList.add('inactive');
   categoriesSection.classList.remove('inactive');
   movieDetailSection.classList.add('inactive');
-  popularContainer.classList.add('inactive');
+
+  navbarHome.classList.remove('navbar-active');
+  navbarPopular.classList.remove('navbar-active');
+  navbarNowPlaying.classList.remove('navbar-active');
+  navbarTopRated.classList.remove('navbar-active');
+  navbarGenres.classList.remove('navbar-active');
 
   const [_, categoryData] = location.hash.split('=');
   const [categoryId, categoryName] = categoryData.split('-');
 
   resetScroll();
   getGenresMoviesFilter(categoryId);
+  getGenresMovies();
 }
 
 function movieDetailsPage() {
@@ -144,11 +172,17 @@ function movieDetailsPage() {
   searchSectionResults.classList.add('inactive');
   navbarInputSectionContainer.style.borderRadius = '10px';
   movieDetailSection.classList.remove('inactive');
-
+  
+  navbarHome.classList.remove('navbar-active');
+  navbarPopular.classList.remove('navbar-active');
+  navbarNowPlaying.classList.remove('navbar-active');
+  navbarTopRated.classList.remove('navbar-active');
+  navbarGenres.classList.remove('navbar-active');
   resetScroll()
   //['#movie=', '#81381'];
   const [_, movieId] = location.hash.split('=');
   getMovieById(movieId);
+  getGenresMovies()
 }
 
 function trendsPage() {}
@@ -160,9 +194,15 @@ function popularPage() {
   categoriesSection.classList.add('inactive');
   movieDetailSection.classList.add('inactive');
   sectionPopular.classList.remove('inactive');
+  navbarHome.classList.remove('navbar-active');
+  navbarPopular.classList.add('navbar-active');
+  navbarNowPlaying.classList.remove('navbar-active');
+  navbarTopRated.classList.remove('navbar-active');
+  navbarGenres.classList.remove('navbar-active');
 
   resetScroll()
-  getMoviesPopular();
+  getMoviesPopular()
+  getGenresMovies()
 }
 
 function topRatedPage() {

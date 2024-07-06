@@ -16,7 +16,13 @@ export const navbarInputSection = document.querySelector(
 export const navbarInputSectionContainer = document.querySelector(
   '.navbar__search-input-container'
 );
-export const navbarHome = document.querySelector('.navbar__link--home');
+export const navbarHome = document.querySelector('.buttons-categories__button--home');
+export const navbarPopular = document.querySelector('.buttons-categories__button--popular');
+export const navbarNowPlaying = document.querySelector('.buttons-categories__button--now-playing');
+export const navbarTopRated = document.querySelector('.buttons-categories__button--top-rated');
+export const navbarGenres = document.querySelector('.buttons-categories__button--genres');
+export const genreContainer = document.querySelector('.genre-container');
+export const genreContainerMain = document.querySelector('.genre-container__columns');
 export const closeIcon = document.querySelector('.close-icon--input');
 export const searchInput = document.querySelector('#search-input');
 export const searchInputResults = document.querySelector(
