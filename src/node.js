@@ -9,20 +9,44 @@ export const buttonsContainerGenres = document.querySelector(
 );
 
 // Navbar
-export const searchIcon = document.querySelector('.nav-search--icon');
+export const searchIcon = document.querySelector('.navbar__icon-search');
 export const navbarInputSection = document.querySelector(
   '.navbar__search-input'
 );
 export const navbarInputSectionContainer = document.querySelector(
   '.navbar__search-input-container'
 );
-export const navbarHome = document.querySelector('.buttons-categories__button--home');
-export const navbarPopular = document.querySelector('.buttons-categories__button--popular');
-export const navbarNowPlaying = document.querySelector('.buttons-categories__button--now-playing');
-export const navbarTopRated = document.querySelector('.buttons-categories__button--top-rated');
-export const navbarGenres = document.querySelector('.buttons-categories__button--genres');
+export const navbarHome = document.querySelectorAll(
+  '.buttons-categories__button--home'
+);
+export const navbarPopular = document.querySelectorAll(
+  '.buttons-categories__button--popular'
+);
+export const navbarNowPlaying = document.querySelectorAll(
+  '.buttons-categories__button--now-playing'
+);
+export const navbarTopRated = document.querySelectorAll(
+  '.buttons-categories__button--top-rated'
+);
+export const navbarGenres = document.querySelectorAll(
+  '.buttons-categories__button--genres'
+);
+
+export const navbarMenuList = document.querySelector('.navbar__menu-list');
+
+export const navbarGenresID = document.querySelector('#navbar__genre');
+export const navbarGenresResponID = document.querySelector('#navbar__genre-respon');
+
 export const genreContainer = document.querySelector('.genre-container');
-export const genreContainerMain = document.querySelector('.genre-container__columns');
+export const genreContainerMain = document.querySelector(
+  '.genre-container__columns'
+);
+
+export const genreContainerRespon = document.querySelector('.genre-container-respon');
+export const genreContainerMainRespon = document.querySelector(
+  '.genre-container__columns-respon'
+);
+
 export const closeIcon = document.querySelector('.close-icon--input');
 export const searchInput = document.querySelector('#search-input');
 export const searchInputResults = document.querySelector(
@@ -45,20 +69,24 @@ export const searchTrendingMovies = document.querySelector(
   '.search-section--trending-movies'
 );
 
+export const menuIcon = document.querySelector('.menu-icon');
+
+export const navbarMenuVertical = document.querySelector('.navbar__menu-vertical')
+
 // Main Section
 export const indexSection = document.querySelector('.index-section');
-export const buttonsHome = document.querySelectorAll(
-  '.buttons-categories__button--home'
-);
-export const buttonsPopular = document.querySelectorAll(
-  '.buttons-categories__button--popular'
-);
-export const buttonsNowPlaying = document.querySelectorAll(
-  '.buttons-categories__button--now-playing'
-);
-export const buttonsTopRated = document.querySelectorAll(
-  '.buttons-categories__button--top-rated'
-);
+// export const buttonsHome = document.querySelectorAll(
+//   '.buttons-categories__button--home'
+// );
+// export const buttonsPopular = document.querySelectorAll(
+//   '.buttons-categories__button--popular'
+// );
+// export const buttonsNowPlaying = document.querySelectorAll(
+//   '.buttons-categories__button--now-playing'
+// );
+// export const buttonsTopRated = document.querySelectorAll(
+//   '.buttons-categories__button--top-rated'
+// );
 export const trendingContainer = document.querySelector('.trending-container');
 export const popularContainer = document.querySelector('.popular-container');
 
@@ -79,9 +107,15 @@ export const categoriesContainer = document.querySelector(
 
 // Popular Section
 export const sectionPopular = document.querySelector('.section-popular');
-console.log(sectionPopular);
+
 export const popularContainerMain = document.querySelector(
   '.popular-container--main'
+);
+
+// Top Rated Section
+export const sectionTopRated = document.querySelector('.section-top-rated');
+export const topRatedContainerMain = document.querySelector(
+  '.top-rated-container--main'
 );
 
 // Poster Section

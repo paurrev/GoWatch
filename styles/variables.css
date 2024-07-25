@@ -11,5 +11,6 @@
   --color-neutral-variant60: #98949E;
   --color-neutral-variant80: #CBC9CF;
   --color-neutral10: #1F1F1F;
+  --color-neutral10: rgba(31, 31, 31, 0.95);
   --font-general: 'system-ui', sans-serif;
 }

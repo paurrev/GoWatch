@@ -4,14 +4,11 @@ import {
   getMovieById,
   getMoviesNowPlaying,
   getMoviesPopular,
+  getMoviesTopRated,
   getSearchMovies,
-  resetScroll,
+  resetScroll
 } from './main.js';
 import {
-  buttonsHome,
-  buttonsNowPlaying,
-  buttonsPopular,
-  buttonsTopRated,
   categoriesSection,
   indexSection,
   logoPrincipal,
@@ -31,6 +28,13 @@ import {
   navbarTopRated,
   navbarGenres,
   genreContainer,
+  closeIcon,
+  sectionTopRated,
+  navbarMenuVertical,
+  navbarGenresID,
+  navbarGenresResponID,
+  genreContainerRespon,
+  navbarMenuList,
 } from './node.js';
 
 // Función genérica para agregar event listeners a los botones
@@ -51,10 +55,20 @@ logoPrincipal.addEventListener('click', () => {
   resetScroll();
 });
 
-addEventListenersToButtons(buttonsHome, '#home');
-addEventListenersToButtons(buttonsPopular, '#popular');
-addEventListenersToButtons(buttonsNowPlaying, '#now-playing');
-addEventListenersToButtons(buttonsTopRated, '#top-rated');
+// Función para remover una clase de una colección de elementos
+const removeClassFromNodeList = (nodeList, className) => {
+  nodeList.forEach((element) => element.classList.remove(className));
+};
+
+// Función para añadir una clase a una colección de elementos
+const addClassToNodeList = (nodeList, className) => {
+  nodeList.forEach((element) => element.classList.add(className));
+};
+
+addEventListenersToButtons(navbarHome, '#home');
+addEventListenersToButtons(navbarPopular, '#popular');
+addEventListenersToButtons(navbarNowPlaying, '#now-playing');
+addEventListenersToButtons(navbarTopRated, '#top-rated');
 
 searchInput.addEventListener('input', (event) => {
   let valueSearch = event.target.value;
@@ -62,20 +76,29 @@ searchInput.addEventListener('input', (event) => {
   if (valueSearch.length > 0) {
     getSearchMovies(valueSearch);
     searchSectionTitle.classList.remove('inactive');
-    searchSectionTrending.classList.add('inactive')
+    searchSectionTrending.classList.add('inactive');
+    closeIcon.style.display = 'block';
   } else {
     searchSectionResultsContainer.innerHTML = '';
     searchSectionTitle.classList.add('inactive');
-    searchSectionTrending.classList.remove('inactive')
+    searchSectionTrending.classList.remove('inactive');
+    closeIcon.style.display = 'none';
   }
 
   //['#search', 'movieId'];
   const [_, movieId] = location.hash.split('=');
 });
 
-navbarGenres.addEventListener('click', () => {
-  genreContainer.classList.toggle('inactive')
+
+navbarGenresID.addEventListener('click', () =>{
+  genreContainer.classList.toggle('inactive');
 })
+
+navbarGenresResponID.addEventListener('click', () => {
+  genreContainerRespon.classList.toggle('inactive')
+  navbarMenuList.classList.add('inactive')
+})
+
 
 const routes = [
   { name: 'home', hashstart: '#home', render: homePage },
@@ -98,9 +121,8 @@ export function navigator() {
   if (searchIndexRenderPage !== -1) {
     rending = routes[searchIndexRenderPage].render;
   }
-  resetScroll()
+  resetScroll();
   rending();
-  
 }
 
 function homePage() {
@@ -110,11 +132,15 @@ function homePage() {
   categoriesSection.classList.add('inactive');
   sectionPopular.classList.add('inactive');
   movieDetailSection.classList.add('inactive');
-  navbarHome.classList.add('navbar-active');
-  navbarPopular.classList.remove('navbar-active');
-  navbarNowPlaying.classList.remove('navbar-active');
-  navbarTopRated.classList.remove('navbar-active');
-  navbarGenres.classList.remove('navbar-active');
+  sectionTopRated.classList.add('inactive');
+
+  addClassToNodeList(navbarHome, 'navbar-active');
+  removeClassFromNodeList(navbarPopular, 'navbar-active');
+  removeClassFromNodeList(navbarNowPlaying, 'navbar-active');
+  removeClassFromNodeList(navbarTopRated, 'navbar-active');
+  removeClassFromNodeList(navbarGenres, 'navbar-active');
+
+  navbarMenuVertical.classList.add('inactive');
   getGenresMovies();
   getMoviesNowPlaying();
   resetScroll();
@@ -132,12 +158,15 @@ function nowPlayingPage() {
   movieDetailSection.classList.add('inactive');
   sectionPopular.classList.add('inactive');
   sectionNowPlaying.classList.remove('inactive');
+  sectionTopRated.classList.add('inactive');
 
-  navbarHome.classList.remove('navbar-active');
-  navbarPopular.classList.remove('navbar-active');
-  navbarNowPlaying.classList.add('navbar-active');
-  navbarTopRated.classList.remove('navbar-active');
-  navbarGenres.classList.remove('navbar-active');
+  removeClassFromNodeList(navbarHome, 'navbar-active');
+  removeClassFromNodeList(navbarPopular, 'navbar-active');
+  addClassToNodeList(navbarNowPlaying, 'navbar-active');
+  removeClassFromNodeList(navbarTopRated, 'navbar-active');
+  removeClassFromNodeList(navbarGenres, 'navbar-active');
+
+  navbarMenuVertical.classList.add('inactive');
   getGenresMovies();
   getMoviesNowPlaying();
   resetScroll();
@@ -150,16 +179,18 @@ function categoriesPage() {
   sectionPopular.classList.add('inactive');
   categoriesSection.classList.remove('inactive');
   movieDetailSection.classList.add('inactive');
+  sectionTopRated.classList.add('inactive');
 
-  navbarHome.classList.remove('navbar-active');
-  navbarPopular.classList.remove('navbar-active');
-  navbarNowPlaying.classList.remove('navbar-active');
-  navbarTopRated.classList.remove('navbar-active');
-  navbarGenres.classList.remove('navbar-active');
+  removeClassFromNodeList(navbarHome, 'navbar-active');
+  removeClassFromNodeList(navbarPopular, 'navbar-active');
+  removeClassFromNodeList(navbarNowPlaying, 'navbar-active');
+  removeClassFromNodeList(navbarTopRated, 'navbar-active');
+  addClassToNodeList(navbarGenres, 'navbar-active');
 
   const [_, categoryData] = location.hash.split('=');
   const [categoryId, categoryName] = categoryData.split('-');
 
+  navbarMenuVertical.classList.add('inactive');
   resetScroll();
   getGenresMoviesFilter(categoryId);
   getGenresMovies();
@@ -172,41 +203,63 @@ function movieDetailsPage() {
   searchSectionResults.classList.add('inactive');
   navbarInputSectionContainer.style.borderRadius = '10px';
   movieDetailSection.classList.remove('inactive');
-  
-  navbarHome.classList.remove('navbar-active');
-  navbarPopular.classList.remove('navbar-active');
-  navbarNowPlaying.classList.remove('navbar-active');
-  navbarTopRated.classList.remove('navbar-active');
-  navbarGenres.classList.remove('navbar-active');
-  resetScroll()
+  sectionTopRated.classList.add('inactive');
+
+  removeClassFromNodeList(navbarHome, 'navbar-active');
+  removeClassFromNodeList(navbarPopular, 'navbar-active');
+  removeClassFromNodeList(navbarNowPlaying, 'navbar-active');
+  removeClassFromNodeList(navbarTopRated, 'navbar-active');
+  removeClassFromNodeList(navbarGenres, 'navbar-active');
+  resetScroll();
+
+  navbarMenuVertical.classList.add('inactive');
   //['#movie=', '#81381'];
   const [_, movieId] = location.hash.split('=');
   getMovieById(movieId);
-  getGenresMovies()
+  getGenresMovies();
 }
 
 function trendsPage() {}
 
 function popularPage() {
-  console.log('PopularPage');
   indexSection.classList.add('inactive');
   sectionNowPlaying.classList.add('inactive');
   categoriesSection.classList.add('inactive');
   movieDetailSection.classList.add('inactive');
   sectionPopular.classList.remove('inactive');
-  navbarHome.classList.remove('navbar-active');
-  navbarPopular.classList.add('navbar-active');
-  navbarNowPlaying.classList.remove('navbar-active');
-  navbarTopRated.classList.remove('navbar-active');
-  navbarGenres.classList.remove('navbar-active');
+  sectionTopRated.classList.add('inactive');
 
-  resetScroll()
-  getMoviesPopular()
-  getGenresMovies()
+  removeClassFromNodeList(navbarHome, 'navbar-active');
+  addClassToNodeList(navbarPopular, 'navbar-active');
+  removeClassFromNodeList(navbarNowPlaying, 'navbar-active');
+  removeClassFromNodeList(navbarTopRated, 'navbar-active');
+  removeClassFromNodeList(navbarGenres, 'navbar-active');
+
+  navbarMenuVertical.classList.add('inactive');
+  resetScroll();
+  getMoviesPopular();
+  getGenresMovies();
 }
 
 function topRatedPage() {
-  console.log('Top Rated');
+  console.log('TopRatedPage');
+  sectionTopRated.classList.remove('inactive');
+  indexSection.classList.add('inactive');
+  sectionNowPlaying.classList.add('inactive');
+  categoriesSection.classList.add('inactive');
+  movieDetailSection.classList.add('inactive');
+  sectionPopular.classList.add('inactive');
+
+  removeClassFromNodeList(navbarHome, 'navbar-active');
+  removeClassFromNodeList(navbarPopular, 'navbar-active');
+  removeClassFromNodeList(navbarNowPlaying, 'navbar-active');
+  addClassToNodeList(navbarTopRated, 'navbar-active');
+  removeClassFromNodeList(navbarGenres, 'navbar-active');
+
+  navbarMenuVertical.classList.add('inactive');
+  resetScroll();
+  getMoviesTopRated();
+  getGenresMovies();
 }
 
 function searchPage() {
