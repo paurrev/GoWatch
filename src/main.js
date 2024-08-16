@@ -257,7 +257,14 @@ export async function getGenresMovies() {
   );
 }
 
-function insertGenres(genres, buttonContainer, classLabel, classRadio, classRadioDesign, classLabelText) {
+function insertGenres(
+  genres,
+  buttonContainer,
+  classLabel,
+  classRadio,
+  classRadioDesign,
+  classLabelText
+) {
   buttonContainer.innerHTML = '';
 
   const currentCategory = location.hash.split('category=')[1]?.split('-')[0];
@@ -275,10 +282,10 @@ function insertGenres(genres, buttonContainer, classLabel, classRadio, classRadi
     // Marcar el radio button si coincide con el género en el hash
     if (genre.id == currentCategory) {
       inputGenre.checked = true;
-      navbarGenres.forEach((genres) =>{
+      navbarGenres.forEach((genres) => {
         genres.checked = true;
         genres.innerHTML = `Genre - ${nameGenre}`;
-      })
+      });
     }
 
     const divGenreRadioDesign = document.createElement('div');
@@ -332,8 +339,64 @@ export async function getGenresMoviesFilter(id) {
   );
 }
 
+function buttonsArrows(buttonContainer) {
+  const svgArrowLeft = `
+    <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24">
+      <path fill="currentColor"
+        d="m9.55 12l7.35 7.35q.375.375.363.875t-.388.875t-.875.375t-.875-.375l-7.7-7.675q-.3-.3-.45-.675t-.15-.75t.15-.75t.45-.675l7.7-7.7q.375-.375.888-.363t.887.388t.375.875t-.375.875z" />
+    </svg>
+  `;
+  const svgArrowRight = `
+    <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24">
+      <path fill="currentColor"
+        d="m14.475 12l-7.35-7.35q-.375-.375-.363-.888t.388-.887t.888-.375t.887.375l7.675 7.7q.3.3.45.675t.15.75t-.15.75t-.45.675l-7.7 7.7q-.375.375-.875.363T7.15 21.1t-.375-.888t.375-.887z" />
+    </svg>
+  `;
+
+  const buttonLeft = document.createElement('button');
+  buttonLeft.className = 'button-left buttons-arrow';
+  buttonLeft.style.display = 'none';
+  const buttonRight = document.createElement('button');
+  buttonRight.className = 'button-right buttons-arrow';
+
+  buttonLeft.addEventListener('click', () => {
+    const scrollStep = buttonContainer.offsetWidth / 2;
+    buttonContainer.scrollLeft -= scrollStep;
+  });
+  buttonRight.addEventListener('click', () => {
+    const scrollStep = buttonContainer.offsetWidth / 2;
+    buttonContainer.scrollLeft += scrollStep;
+  });
+
+  buttonContainer.addEventListener('scroll', () => {
+    const scrollLeft = buttonContainer.scrollLeft;
+    const clientWidth = buttonContainer.clientWidth;
+    const scrollWidth = buttonContainer.scrollWidth;
+
+    console.log(clientWidth)
+
+    buttonLeft.style.display = scrollLeft <= 0 ? 'none' : 'block';
+    buttonRight.style.display =
+      scrollLeft + clientWidth >= scrollWidth ? 'none' : 'block';
+
+    // Actualiza la posición de los botones en función del scroll
+    buttonLeft.style.left = `${scrollLeft}px`;
+    buttonRight.style.right = `-${scrollLeft}px`;
+  });
+
+  buttonLeft.insertAdjacentHTML('afterbegin', svgArrowLeft);
+  buttonRight.insertAdjacentHTML('afterbegin', svgArrowRight);
+
+  buttonContainer.appendChild(buttonLeft);
+  buttonContainer.appendChild(buttonRight);
+}
+
 function insertMoviesBillboard(data, movieContainer, classImg, classId = null) {
   movieContainer.innerHTML = null;
+
+  if (!classId) {
+    buttonsArrows(movieContainer);
+  }
 
   data.forEach((movie) => {
     const imgPoster = document.createElement('img');
@@ -461,7 +524,7 @@ async function removeMoviesFavorites(id) {
   const data = await response.json();
 }
 
-window.addEventListener('load', () => {
+window.addEventListener('DOMContentLoaded', () => {
   navigator();
   resetScroll();
 });
@@ -471,7 +534,7 @@ window.addEventListener('hashchange', () => {
   if (!location.hash.startsWith('#category=')) {
     navbarGenres.forEach((genre) => {
       genre.innerHTML = 'Genres';
-    }) 
+    });
   }
 });
 

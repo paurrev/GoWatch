@@ -2,6 +2,7 @@
   --color-surface: #050c14;
   --color-on-surface: #cccccc;
   --color-surface-high: #2B2B2B;
+  --color-surface-opacity: #050c14cc;
   --color-primary: #420f95;
   --color-on-primary: #ffffff;
   --color-primary80: #B690F4;
@@ -13,4 +14,5 @@
   --color-neutral10: #1F1F1F;
   --color-neutral10: rgba(31, 31, 31, 0.95);
   --font-general: 'system-ui', sans-serif;
+  --skeleton: #0a1829;
 }
