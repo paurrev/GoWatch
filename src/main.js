@@ -36,6 +36,7 @@ import {
   navbarMenuVertical,
   genreContainerMainRespon,
 } from './node.js';
+import { lazyLoadBillboard, LazyLoadHome } from './intersectionObserver.js';
 
 const imgBaseURL = 'https://image.tmdb.org/t/p/w500/';
 const imgBaseURLBig = 'https://image.tmdb.org/t/p/w1280';
@@ -373,15 +374,13 @@ function buttonsArrows(buttonContainer) {
     const clientWidth = buttonContainer.clientWidth;
     const scrollWidth = buttonContainer.scrollWidth;
 
-    console.log(clientWidth)
+    // Actualiza la posición de los botones en función del scroll
+    buttonLeft.style.left = `${scrollLeft}px`;
+    buttonRight.style.right = `-${scrollLeft}px`;
 
     buttonLeft.style.display = scrollLeft <= 0 ? 'none' : 'block';
     buttonRight.style.display =
       scrollLeft + clientWidth >= scrollWidth ? 'none' : 'block';
-
-    // Actualiza la posición de los botones en función del scroll
-    buttonLeft.style.left = `${scrollLeft}px`;
-    buttonRight.style.right = `-${scrollLeft}px`;
   });
 
   buttonLeft.insertAdjacentHTML('afterbegin', svgArrowLeft);
@@ -390,6 +389,8 @@ function buttonsArrows(buttonContainer) {
   buttonContainer.appendChild(buttonLeft);
   buttonContainer.appendChild(buttonRight);
 }
+
+('');
 
 function insertMoviesBillboard(data, movieContainer, classImg, classId = null) {
   movieContainer.innerHTML = null;
@@ -405,16 +406,25 @@ function insertMoviesBillboard(data, movieContainer, classImg, classId = null) {
     });
     imgPoster.className = classImg;
     imgPoster.setAttribute('alt', movie.title);
-    imgPoster.src = imgBaseURL + movie.poster_path;
+    imgPoster.setAttribute('data-img', imgBaseURL + movie.poster_path);
+    imgPoster.onerror = () => {
+      imgPoster.src = '../images/default-img.webp'; // ruta a la imagen por defecto
+    };
+    imgPoster.onload = () => {
+      imgPoster.onerror = null;
+    };
 
     if (classId) {
       const divPoster = document.createElement('div');
       divPoster.className = classId;
       divPoster.appendChild(imgPoster);
       movieContainer.appendChild(divPoster);
+      lazyLoadBillboard.observe(imgPoster);
     } else {
       movieContainer.appendChild(imgPoster);
     }
+
+    LazyLoadHome.observe(imgPoster);
   });
 }
 
