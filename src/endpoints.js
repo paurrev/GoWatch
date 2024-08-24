@@ -2,10 +2,14 @@ import { API_KEY, account_id } from './secrets.js';
 
 export const ENDPOINTS_MOVIE = {
   getAllMovies: `https://api.themoviedb.org/3/discover/movie?api_key=${API_KEY}&page=1&language=es-MX`,
-  getMoviesPopular: `https://api.themoviedb.org/3/movie/popular?api_key=${API_KEY}&language=es-MX`,
-  getAllMoviesTrending: `https://api.themoviedb.org/3/trending/movie/day?api_key=${API_KEY}&language=es-MX`,
-  getMoviesNowPlaying: `https://api.themoviedb.org/3/movie/now_playing?api_key=${API_KEY}&language=es-MX&page=1`,
-  getMoviesTopRated: `https://api.themoviedb.org/3/movie/top_rated?api_key=${API_KEY}&language=es-MX`,
+  getMoviesPopular: (page) =>
+    `https://api.themoviedb.org/3/movie/popular?api_key=${API_KEY}&language=es-MX&page=${page}`,
+  getAllMoviesTrending: (page) =>
+    `https://api.themoviedb.org/3/trending/movie/day?api_key=${API_KEY}&language=es-MX&page=${page}`,
+  getMoviesNowPlaying: (page) =>
+    `https://api.themoviedb.org/3/movie/now_playing?api_key=${API_KEY}&language=es-MX&page=${page}`,
+  getMoviesTopRated: (page) =>
+    `https://api.themoviedb.org/3/movie/top_rated?api_key=${API_KEY}&language=es-MX&page=${page}`,
   getAllMoviesPoster: `https://api.themoviedb.org/3/movie/653346/images&language=es-MX?api_key=${API_KEY}`,
   getMoviesFavorites: `https://api.themoviedb.org/3/account/${account_id}/favorite/movies&language=es-MX?api_key=${API_KEY}&language=es-MX`,
   addMoviesFavorites: `https://api.themoviedb.org/3/account/${account_id}/favorite?api_key=${API_KEY}&language=es-MX`,

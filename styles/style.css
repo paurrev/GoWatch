@@ -460,7 +460,9 @@ html .inactive {
 }
 
 .now-playing-container--main,
-.popular-container--main {
+.popular-container--main,
+.top-rated-container--main,
+.categories-container--main {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(170px, 1fr));
   gap: 16px;

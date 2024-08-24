@@ -5,9 +5,11 @@ import {
   getMoviesNowPlaying,
   getMoviesPopular,
   getMoviesTopRated,
+  getPaginatedMovies,
   getSearchMovies,
-  resetScroll
+  resetScroll,
 } from './main.js';
+import { ENDPOINTS_MOVIE } from './endpoints.js';
 import {
   categoriesSection,
   indexSection,
@@ -35,7 +37,16 @@ import {
   navbarGenresResponID,
   genreContainerRespon,
   navbarMenuList,
+  popularContainerMain,
+  categoriesContainer,
+  nowPlayingContainerMain,
+  topRatedContainerMain,
 } from './node.js';
+
+let page = 1;
+let infiniteScroll;
+
+window.addEventListener('scroll', infiniteScroll, false);
 
 // Función genérica para agregar event listeners a los botones
 function addEventListenersToButtons(buttons, hashValue) {
@@ -89,16 +100,14 @@ searchInput.addEventListener('input', (event) => {
   const [_, movieId] = location.hash.split('=');
 });
 
-
-navbarGenresID.addEventListener('click', () =>{
+navbarGenresID.addEventListener('click', () => {
   genreContainer.classList.toggle('inactive');
-})
+});
 
 navbarGenresResponID.addEventListener('click', () => {
-  genreContainerRespon.classList.toggle('inactive')
-  navbarMenuList.classList.add('inactive')
-})
-
+  genreContainerRespon.classList.toggle('inactive');
+  navbarMenuList.classList.add('inactive');
+});
 
 const routes = [
   { name: 'home', hashstart: '#home', render: homePage },
@@ -113,16 +122,27 @@ const routes = [
 ];
 
 export function navigator() {
+  if (infiniteScroll) {
+    window.removeEventListener('scroll', infiniteScroll, { passive: false });
+    infiniteScroll = null;
+    console.log(infiniteScroll);
+  }
+
+  
   const hash = window.location.hash;
   let rending = hash === '' ? homePage : page404;
   const searchIndexRenderPage = routes.findIndex((route) =>
     hash.startsWith(route.hashstart)
-  );
-  if (searchIndexRenderPage !== -1) {
-    rending = routes[searchIndexRenderPage].render;
-  }
-  resetScroll();
-  rending();
+);
+if (searchIndexRenderPage !== -1) {
+  rending = routes[searchIndexRenderPage].render;
+}
+rending();
+
+if (infiniteScroll) {
+  window.addEventListener('scroll', infiniteScroll, { passive: false });
+}
+resetScroll();
 }
 
 function homePage() {
@@ -170,6 +190,16 @@ function nowPlayingPage() {
   getGenresMovies();
   getMoviesNowPlaying();
   resetScroll();
+
+  infiniteScroll = () =>
+    getPaginatedMovies(
+      ENDPOINTS_MOVIE.getMoviesNowPlaying,
+      nowPlayingContainerMain,
+      'now-playing-poster billboard-container--poster',
+      'now-playing--container billboard-poster'
+    );
+
+  
 }
 
 function categoriesPage() {
@@ -201,6 +231,7 @@ function movieDetailsPage() {
   sectionNowPlaying.classList.add('inactive');
   categoriesSection.classList.add('inactive');
   searchSectionResults.classList.add('inactive');
+  sectionPopular.classList.add('inactive');
   navbarInputSectionContainer.style.borderRadius = '10px';
   movieDetailSection.classList.remove('inactive');
   sectionTopRated.classList.add('inactive');
@@ -237,8 +268,18 @@ function popularPage() {
 
   navbarMenuVertical.classList.add('inactive');
   resetScroll();
-  getMoviesPopular();
+  // movieDetailSection.innerHTML = '';
+  getMoviesPopular(page);
   getGenresMovies();
+
+  // Asigna la función de scroll infinito
+  infiniteScroll = () =>
+    getPaginatedMovies(
+      ENDPOINTS_MOVIE.getMoviesPopular, // Usa el endpoint con la página actual
+      popularContainerMain,
+      'popular-poster billboard-container--poster',
+      'popular--container billboard-poster'
+    );
 }
 
 function topRatedPage() {
@@ -260,6 +301,14 @@ function topRatedPage() {
   resetScroll();
   getMoviesTopRated();
   getGenresMovies();
+
+  infiniteScroll = () =>
+    getPaginatedMovies(
+      ENDPOINTS_MOVIE.getMoviesTopRated,
+      topRatedContainerMain,
+      'top-rated-poster billboard-container--poster',
+      'top-rated--container billboard-poster'
+    );
 }
 
 function searchPage() {

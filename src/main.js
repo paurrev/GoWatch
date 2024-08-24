@@ -38,6 +38,8 @@ import {
 } from './node.js';
 import { lazyLoadBillboard, LazyLoadHome } from './intersectionObserver.js';
 
+export let page = 1;
+
 const imgBaseURL = 'https://image.tmdb.org/t/p/w500/';
 const imgBaseURLBig = 'https://image.tmdb.org/t/p/w1280';
 const imgBaseURLSmall = 'https://image.tmdb.org/t/p/w300';
@@ -73,7 +75,7 @@ export async function getMovies() {
 }
 
 async function getMoviesTrending() {
-  const response = await fetch(ENDPOINTS_MOVIE.getAllMoviesTrending);
+  const response = await fetch(ENDPOINTS_MOVIE.getAllMoviesTrending(page));
   const data = await response.json();
 
   const dataMovie = data.results;
@@ -91,12 +93,11 @@ async function getMoviesTrending() {
 }
 
 export async function getMoviesPopular() {
-  const response = await fetch(ENDPOINTS_MOVIE.getMoviesPopular);
+  const response = await fetch(ENDPOINTS_MOVIE.getMoviesPopular(page));
   const data = await response.json();
 
-  //
   const dataMovie = data.results;
-  //
+  // console.log(data.total_pages)
 
   if (response.status === 200) {
     insertMoviesBillboard(
@@ -116,7 +117,7 @@ export async function getMoviesPopular() {
 }
 
 export async function getMoviesNowPlaying() {
-  const response = await fetch(ENDPOINTS_MOVIE.getMoviesNowPlaying);
+  const response = await fetch(ENDPOINTS_MOVIE.getMoviesNowPlaying(page));
   const data = await response.json();
 
   const dataMovie = data.results;
@@ -138,7 +139,7 @@ export async function getMoviesNowPlaying() {
 }
 
 export async function getMoviesTopRated() {
-  const response = await fetch(ENDPOINTS_MOVIE.getMoviesTopRated);
+  const response = await fetch(ENDPOINTS_MOVIE.getMoviesTopRated(page));
   const data = await response.json();
 
   const dataMovie = data.results;
@@ -167,6 +168,35 @@ export async function getSearchMovies(query) {
   const data = await response.json();
   const movies = data.results;
   insertSearchMovies(movies, searchSectionResultsContainer);
+}
+
+let isLoading = false;
+
+export async function getPaginatedMovies(
+  url,
+  nameContainer,
+  classImg,
+  classId,
+) {
+
+  const { scrollTop, scrollHeight, clientHeight } = document.documentElement;
+  const scrollBottom = scrollTop + clientHeight >= scrollHeight - 100;
+
+  // console.log(scrollBottom);
+  if (scrollBottom && !isLoading) {
+    isLoading = true; // Activa el flag
+    page++; // Incrementa la página antes de hacer la petición\
+    const response = await fetch(url(page));
+    const data = await response.json();
+
+    if (response.status === 200) {
+      const dataMovie = data.results;
+      insertMoviesBillboard(dataMovie, nameContainer, classImg, classId, false);
+      isLoading = false; // reset the flag
+    } else {
+      console.error(`Hubo un error ${response.status}`);
+    }
+  }
 }
 
 function insertSearchMovies(movies, searchResults) {
@@ -392,8 +422,16 @@ function buttonsArrows(buttonContainer) {
 
 ('');
 
-function insertMoviesBillboard(data, movieContainer, classImg, classId = null) {
-  movieContainer.innerHTML = null;
+function insertMoviesBillboard(
+  data,
+  movieContainer,
+  classImg,
+  classId = null,
+  clean = true
+) {
+  if (clean) {
+    movieContainer.innerHTML = null;
+  }
 
   if (!classId) {
     buttonsArrows(movieContainer);
@@ -470,22 +508,24 @@ export async function getMovieById(id) {
 }
 
 function insertGetMoviesById(movie) {
+  console.log(movie)
   const divBackdrop = document.createElement('div');
   divBackdrop.classList.add('backdrop-div');
-
+  
   const imgBackdrop = document.createElement('img');
-
+  
   imgBackdrop.src = `${imgBaseURLBig}${movie.backdrop_path}`;
   imgBackdrop.className = 'backdrop-img';
   imgBackdrop.alt = `Backdrop of ${movie.title}`;
   divBackdrop.appendChild(imgBackdrop);
   backdropMovie.appendChild(divBackdrop);
-
+  
   const releaseDate = movie.release_date;
   const year = releaseDate.split('-')[0];
   titleMovieName.innerText = movie.title;
   titleMovieYear.innerText = `(${year})`;
   synopsisText.innerText = movie.overview;
+  
 }
 
 function changeMoviesFavorites(isChecked, id) {
@@ -550,4 +590,4 @@ window.addEventListener('hashchange', () => {
 
 getMovies();
 getMoviesTrending();
-getMoviesPopular();
+getMoviesPopular(1);
