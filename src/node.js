@@ -146,3 +146,39 @@ export const synopsisText = document.querySelector('.synopsis-text');
 export const bentoInformationContainer = document.querySelector(
   '.bento-information_container'
 );
+
+export const informationReleaseDate = document.querySelector(
+  '#information-release-date'
+);
+
+export const certificationText = document.querySelector('#information-certifications');
+
+export const informationRevenuesMoney = document.querySelector(
+  '#information-revenues-money'
+);
+
+export const informationBudgetsMoney = document.querySelector(
+  '#information-budgets-money'
+);
+
+export const informationCrewName1 = document.querySelector('.information-crew-name1');
+
+export const informationCrewName1_1 = document.querySelector('.information-crew-name1-1');
+
+export const informationCrewName2 = document.querySelector('.information-crew-name2');
+
+export const informationCrewName2_1 = document.querySelector('.information-crew-name2-1');
+
+export const informationCrewName3 = document.querySelector('.information-crew-name3');
+
+export const informationCrewName3_1= document.querySelector('.information-crew-name3-1');
+
+export const languageText = document.querySelector('.language-text');
+
+export const flagLanguage = document.querySelector('.flag-language');
+
+export const informationGenre = document.querySelector('.information-genres');
+
+export const genreText = document.querySelector('.genre-text');
+
+export const runTimeDuration = document.querySelector('.duration-time');

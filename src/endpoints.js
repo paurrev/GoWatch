@@ -20,6 +20,10 @@ export const ENDPOINTS_MOVIE = {
     `https://api.themoviedb.org/3/search/movie?api_key=${API_KEY}&query=${query}&language=es-MX`,
   getMoviesById: (id) =>
     `https://api.themoviedb.org/3/movie/${id}?api_key=${API_KEY}&language=es-MX`,
+  getCrew: (id) =>
+    `https://api.themoviedb.org/3/movie/${id}/credits?api_key=${API_KEY}&language=es-MX`,
+  getCertification: (id) =>
+    `https://api.themoviedb.org/3/movie/${id}/release_dates?api_key=${API_KEY}`,
 };
 
 export const ENDPOINTS_TV = {

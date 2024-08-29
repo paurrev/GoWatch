@@ -35,6 +35,20 @@ import {
   menuIcon,
   navbarMenuVertical,
   genreContainerMainRespon,
+  informationReleaseDate,
+  informationRevenuesMoney,
+  informationBudgetsMoney,
+  informationCrewName2,
+  informationCrewName2_1,
+  informationCrewName3,
+  informationCrewName3_1,
+  informationCrewName1,
+  informationCrewName1_1,
+  languageText,
+  flagLanguage,
+  informationGenre,
+  runTimeDuration,
+  certificationText,
 } from './node.js';
 import { lazyLoadBillboard, LazyLoadHome } from './intersectionObserver.js';
 
@@ -97,7 +111,6 @@ export async function getMoviesPopular() {
   const data = await response.json();
 
   const dataMovie = data.results;
-  // console.log(data.total_pages)
 
   if (response.status === 200) {
     insertMoviesBillboard(
@@ -176,13 +189,11 @@ export async function getPaginatedMovies(
   url,
   nameContainer,
   classImg,
-  classId,
+  classId
 ) {
-
   const { scrollTop, scrollHeight, clientHeight } = document.documentElement;
   const scrollBottom = scrollTop + clientHeight >= scrollHeight - 100;
 
-  // console.log(scrollBottom);
   if (scrollBottom && !isLoading) {
     isLoading = true; // Activa el flag
     page++; // Incrementa la página antes de hacer la petición\
@@ -503,29 +514,183 @@ export async function getMovieById(id) {
   });
 
   const data = await response.json();
+
+  console.log(data);
   backdropMovie.innerHTML = '';
   insertGetMoviesById(data);
 }
 
 function insertGetMoviesById(movie) {
-  console.log(movie)
+  const budget = movie.budget;
+  const revenue = movie.revenue;
+  const id = movie.id;
+  const language = movie.original_language;
+  const runTime = movie.runtime
+
   const divBackdrop = document.createElement('div');
   divBackdrop.classList.add('backdrop-div');
-  
+
   const imgBackdrop = document.createElement('img');
-  
+
   imgBackdrop.src = `${imgBaseURLBig}${movie.backdrop_path}`;
   imgBackdrop.className = 'backdrop-img';
   imgBackdrop.alt = `Backdrop of ${movie.title}`;
   divBackdrop.appendChild(imgBackdrop);
   backdropMovie.appendChild(divBackdrop);
-  
+
   const releaseDate = movie.release_date;
   const year = releaseDate.split('-')[0];
   titleMovieName.innerText = movie.title;
   titleMovieYear.innerText = `(${year})`;
   synopsisText.innerText = movie.overview;
-  
+
+  insertReleaseDate(releaseDate);
+  getCertification(id)
+  insertMoney(budget, informationRevenuesMoney);
+  insertMoney(revenue, informationBudgetsMoney);
+  insertCrew(id);
+  getLanguageName(language);
+  getFlagLanguage(language);
+
+  getGenresMovieId(movie);
+  getRunTime(runTime)
+}
+
+function insertReleaseDate(dateRelease) {
+  const [year, month, day] = dateRelease.split('-');
+
+  const formattedDate = `${day}/${month}/${year}`;
+
+  informationReleaseDate.innerHTML = formattedDate;
+}
+
+async function getCertification(id){
+  const url = ENDPOINTS_MOVIE.getCertification(id);
+  const response = await fetch(url, {
+    method: 'GET',
+    headers: {
+      accept: 'application/json',
+      Authorization: TOKEN_AUTH,
+    },
+  });
+
+  const data = await response.json();
+
+  insertCertifications(data)
+}
+
+function insertCertifications(data){
+  certificationText.innerHTML = ''
+  const resultCertification = data.results.find(
+    (cert) => cert.iso_3166_1 === 'US'
+  );
+
+  const certification = resultCertification.release_dates[0].certification;
+  console.log(certification)
+
+  certificationText.innerHTML  = certification
+}
+
+function insertMoney(money, containerMoney) {
+  const number = Number(money);
+
+  const formatter = new Intl.NumberFormat('en-US', {
+    style: 'currency',
+    currency: 'USD',
+    minimumFractionDigits: 2,
+  });
+
+  const formattedCurrency = formatter.format(number);
+  containerMoney.innerHTML = formattedCurrency;
+}
+
+async function insertCrew(id) {
+  const url = ENDPOINTS_MOVIE.getCrew(id);
+  const response = await fetch(url, {
+    method: 'GET',
+    headers: {
+      accept: 'application/json',
+      Authorization: TOKEN_AUTH,
+    },
+  });
+
+  const data = await response.json();
+
+  const crewArray = data.crew;
+
+  const director = crewArray.find((crew) => crew.job === 'Director');
+
+  // Paso 2: Generar dos índices aleatorios únicos
+  let randomIndex1 = Math.floor(Math.random() * crewArray.length);
+  let randomIndex2;
+
+  do {
+    randomIndex2 = Math.floor(Math.random() * crewArray.length);
+  } while (randomIndex2 === randomIndex1);
+
+  informationCrewName1.innerHTML = director.name;
+  informationCrewName1_1.innerHTML = director.job;
+
+  const randomCrewMember1 = crewArray[randomIndex1];
+  informationCrewName2.innerHTML = randomCrewMember1.name;
+  informationCrewName2_1.innerHTML = randomCrewMember1.job;
+
+  const randomCrewMember2 = crewArray[randomIndex2];
+  informationCrewName3.innerHTML = randomCrewMember2.name;
+  informationCrewName3_1.innerHTML = randomCrewMember2.job;
+}
+
+function getLanguageName(language) {
+  const displayNames = new Intl.DisplayNames(['en'], { type: 'language' });
+  const languageName = displayNames.of(language);
+  languageText.innerHTML = languageName;
+}
+
+function getFlagLanguage(isoLanguage) {
+  const pathFlags = mapFlags[isoLanguage];
+
+  flagLanguage.src = pathFlags;
+}
+
+function getRunTime(minutes) {
+  const convertRunTime = parseInt(minutes)
+
+  const hours = Math.floor(convertRunTime / 60);
+  const minutesRest = convertRunTime % 60;
+
+  const runTime = `${hours}h ${minutesRest}m`
+
+  runTimeDuration.innerHTML = runTime;
+}
+
+const mapFlags = {
+  en: '../images/icons/flags/english.svg',
+  es: '../images/icons/flags/spanish.svg',
+  it: '../images/icons/flags/italian.svg',
+  fr: '../images/icons/flags/french.svg',
+  de: '../images/icons/flags/german.svg',
+  pt: '../images/icons/flags/portuguese.svg',
+  zh: '../images/icons/flags/chinese.svg',
+  ja: '../images/icons/flags/japanese.svg',
+  tr: './images/icons/flags/turkish.svg',
+};
+
+function getGenresMovieId(data) {
+  informationGenre.innerHTML = '';
+  const genresMovie = data.genres.slice(0, 3);
+
+  genresMovie.forEach((genre) => {
+    const spanGenre = document.createElement('span');
+
+    spanGenre.innerHTML += genre.name;
+    spanGenre.className = 'genres-text';
+    // Insertar el span en el elemento objetivo usando insertAdjacentHTML
+    informationGenre.insertAdjacentHTML('afterbegin', spanGenre.outerHTML);
+  });
+  const spanGenreTitle = document.createElement('span');
+  spanGenreTitle.innerHTML = 'Genres';
+  spanGenreTitle.className = 'genre-title';
+  informationGenre.insertAdjacentHTML('beforeend', spanGenreTitle.outerHTML);
 }
 
 function changeMoviesFavorites(isChecked, id) {
@@ -555,6 +720,17 @@ async function saveMoviesFavorites(id) {
 
   const data = await response.json();
 }
+
+let number = document.querySelector('#number');
+let counter = 0;
+setInterval(() => {
+  if (counter == 72) {
+    clearInterval;
+  } else {
+    counter += 1;
+    number.innerHTML = `${counter}%`;
+  }
+}, 24);
 
 async function removeMoviesFavorites(id) {
   const response = await fetch(ENDPOINTS_MOVIE.addMoviesFavorites, {

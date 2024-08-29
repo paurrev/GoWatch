@@ -128,21 +128,21 @@ export function navigator() {
     console.log(infiniteScroll);
   }
 
-  
   const hash = window.location.hash;
   let rending = hash === '' ? homePage : page404;
   const searchIndexRenderPage = routes.findIndex((route) =>
     hash.startsWith(route.hashstart)
-);
-if (searchIndexRenderPage !== -1) {
-  rending = routes[searchIndexRenderPage].render;
-}
-rending();
+  );
+  if (searchIndexRenderPage !== -1) {
+    rending = routes[searchIndexRenderPage].render;
+  }
+  rending();
 
-if (infiniteScroll) {
-  window.addEventListener('scroll', infiniteScroll, { passive: false });
-}
-resetScroll();
+  if (infiniteScroll) {
+    window.addEventListener('scroll', infiniteScroll, { passive: false });
+  }
+  page = 1
+  resetScroll();
 }
 
 function homePage() {
@@ -198,8 +198,6 @@ function nowPlayingPage() {
       'now-playing-poster billboard-container--poster',
       'now-playing--container billboard-poster'
     );
-
-  
 }
 
 function categoriesPage() {
