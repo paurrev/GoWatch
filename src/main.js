@@ -49,6 +49,11 @@ import {
   informationGenre,
   runTimeDuration,
   certificationText,
+  informationCertification,
+  informationScore,
+  informationDuration,
+  informationCrew,
+  informationBudget,
 } from './node.js';
 import { lazyLoadBillboard, LazyLoadHome } from './intersectionObserver.js';
 
@@ -525,7 +530,7 @@ function insertGetMoviesById(movie) {
   const revenue = movie.revenue;
   const id = movie.id;
   const language = movie.original_language;
-  const runTime = movie.runtime
+  const runTime = movie.runtime;
 
   const divBackdrop = document.createElement('div');
   divBackdrop.classList.add('backdrop-div');
@@ -545,7 +550,7 @@ function insertGetMoviesById(movie) {
   synopsisText.innerText = movie.overview;
 
   insertReleaseDate(releaseDate);
-  getCertification(id)
+  getCertification(id);
   insertMoney(budget, informationRevenuesMoney);
   insertMoney(revenue, informationBudgetsMoney);
   insertCrew(id);
@@ -553,7 +558,7 @@ function insertGetMoviesById(movie) {
   getFlagLanguage(language);
 
   getGenresMovieId(movie);
-  getRunTime(runTime)
+  getRunTime(runTime);
 }
 
 function insertReleaseDate(dateRelease) {
@@ -564,7 +569,7 @@ function insertReleaseDate(dateRelease) {
   informationReleaseDate.innerHTML = formattedDate;
 }
 
-async function getCertification(id){
+async function getCertification(id) {
   const url = ENDPOINTS_MOVIE.getCertification(id);
   const response = await fetch(url, {
     method: 'GET',
@@ -576,19 +581,50 @@ async function getCertification(id){
 
   const data = await response.json();
 
-  insertCertifications(data)
+  insertCertifications(data);
 }
 
-function insertCertifications(data){
-  certificationText.innerHTML = ''
-  const resultCertification = data.results.find(
+function insertCertifications(data) {
+  certificationText.innerHTML = '';
+  const allCertifications = data.results.find(
     (cert) => cert.iso_3166_1 === 'US'
   );
 
-  const certification = resultCertification.release_dates[0].certification;
-  console.log(certification)
+  if (allCertifications) {
+    let certificationsRelease = allCertifications.release_dates;
+    const certificationFind = certificationsRelease.find(
+      (certif) => certif.certification != ''
+    );
+  
+    if (certificationFind) {
+  
+      let certification = certificationFind.certification;
+  
+      if (certification.length === 5) {
+        certificationText.style.fontSize = '35px';
+        certificationText.style.height = '65px';
+        certificationText.style.padding = '10px';
+        certificationText.innerHTML = certification;
+      } else if (certification === 'R') {
+        certificationText.style.fontSize = '70px';
+        certificationText.style.height = '80px';
+        certificationText.style.padding = '15px';
+        certificationText.innerHTML = certification;
+      } else {
+        certificationText.style.fontSize = '70px';
+        certificationText.style.height = '80px';
+        certificationText.style.padding = '15px 5px';
+        certificationText.innerHTML = certification;
+      }
+    } else {
+      informationCertification.style.display = 'none';
+      informationGenre.style.gridRow = '1 / 3';
+    }
+  } else{
+    informationCertification.style.display = 'none';
+    informationGenre.style.gridRow = '1 / 3';
+  }
 
-  certificationText.innerHTML  = certification
 }
 
 function insertMoney(money, containerMoney) {
@@ -653,12 +689,12 @@ function getFlagLanguage(isoLanguage) {
 }
 
 function getRunTime(minutes) {
-  const convertRunTime = parseInt(minutes)
+  const convertRunTime = parseInt(minutes);
 
   const hours = Math.floor(convertRunTime / 60);
   const minutesRest = convertRunTime % 60;
 
-  const runTime = `${hours}h ${minutesRest}m`
+  const runTime = `${hours}h ${minutesRest}m`;
 
   runTimeDuration.innerHTML = runTime;
 }
@@ -677,20 +713,28 @@ const mapFlags = {
 
 function getGenresMovieId(data) {
   informationGenre.innerHTML = '';
-  const genresMovie = data.genres.slice(0, 3);
 
-  genresMovie.forEach((genre) => {
-    const spanGenre = document.createElement('span');
+  if (data.genres.length !== 0) {
+    const genresMovie = data.genres.slice(0, 3);
 
-    spanGenre.innerHTML += genre.name;
-    spanGenre.className = 'genres-text';
-    // Insertar el span en el elemento objetivo usando insertAdjacentHTML
-    informationGenre.insertAdjacentHTML('afterbegin', spanGenre.outerHTML);
-  });
-  const spanGenreTitle = document.createElement('span');
-  spanGenreTitle.innerHTML = 'Genres';
-  spanGenreTitle.className = 'genre-title';
-  informationGenre.insertAdjacentHTML('beforeend', spanGenreTitle.outerHTML);
+    genresMovie.forEach((genre) => {
+      const spanGenre = document.createElement('span');
+
+      spanGenre.innerHTML += genre.name;
+      spanGenre.className = 'genres-text';
+      informationGenre.insertAdjacentHTML('afterbegin', spanGenre.outerHTML);
+    });
+    const spanGenreTitle = document.createElement('span');
+    spanGenreTitle.innerHTML = 'Genres';
+    spanGenreTitle.className = 'genre-title';
+    informationGenre.insertAdjacentHTML('beforeend', spanGenreTitle.outerHTML);
+  } else {
+    informationGenre.style.display = 'none';
+    informationBudget.style.gridColumn = '2 / 4';
+    informationScore.style.gridColumn = '2 / 3';
+    informationDuration.style.gridColumn = '3 / 4';
+    informationCrew.style.gridColumn = '4 / 6';
+  }
 }
 
 function changeMoviesFavorites(isChecked, id) {

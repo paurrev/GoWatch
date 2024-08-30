@@ -35,14 +35,18 @@ export const navbarGenres = document.querySelectorAll(
 export const navbarMenuList = document.querySelector('.navbar__menu-list');
 
 export const navbarGenresID = document.querySelector('#navbar__genre');
-export const navbarGenresResponID = document.querySelector('#navbar__genre-respon');
+export const navbarGenresResponID = document.querySelector(
+  '#navbar__genre-respon'
+);
 
 export const genreContainer = document.querySelector('.genre-container');
 export const genreContainerMain = document.querySelector(
   '.genre-container__columns'
 );
 
-export const genreContainerRespon = document.querySelector('.genre-container-respon');
+export const genreContainerRespon = document.querySelector(
+  '.genre-container-respon'
+);
 export const genreContainerMainRespon = document.querySelector(
   '.genre-container__columns-respon'
 );
@@ -71,7 +75,9 @@ export const searchTrendingMovies = document.querySelector(
 
 export const menuIcon = document.querySelector('.menu-icon');
 
-export const navbarMenuVertical = document.querySelector('.navbar__menu-vertical')
+export const navbarMenuVertical = document.querySelector(
+  '.navbar__menu-vertical'
+);
 
 // Main Section
 export const indexSection = document.querySelector('.index-section');
@@ -151,27 +157,53 @@ export const informationReleaseDate = document.querySelector(
   '#information-release-date'
 );
 
-export const certificationText = document.querySelector('#information-certifications');
+export const informationCrew = document.querySelector('.information-crew');
+
+export const informationCertification = document.querySelector(
+  '.information-classification'
+);
+
+export const certificationText = document.querySelector(
+  '#information-certifications'
+);
 
 export const informationRevenuesMoney = document.querySelector(
   '#information-revenues-money'
 );
 
+export const informationScore = document.querySelector('.information-score');
+
+export const informationDuration = document.querySelector('.information-duration');
+
+export const informationBudget = document.querySelector('.information-budgets');
+
 export const informationBudgetsMoney = document.querySelector(
   '#information-budgets-money'
 );
 
-export const informationCrewName1 = document.querySelector('.information-crew-name1');
+export const informationCrewName1 = document.querySelector(
+  '.information-crew-name1'
+);
 
-export const informationCrewName1_1 = document.querySelector('.information-crew-name1-1');
+export const informationCrewName1_1 = document.querySelector(
+  '.information-crew-name1-1'
+);
 
-export const informationCrewName2 = document.querySelector('.information-crew-name2');
+export const informationCrewName2 = document.querySelector(
+  '.information-crew-name2'
+);
 
-export const informationCrewName2_1 = document.querySelector('.information-crew-name2-1');
+export const informationCrewName2_1 = document.querySelector(
+  '.information-crew-name2-1'
+);
 
-export const informationCrewName3 = document.querySelector('.information-crew-name3');
+export const informationCrewName3 = document.querySelector(
+  '.information-crew-name3'
+);
 
-export const informationCrewName3_1= document.querySelector('.information-crew-name3-1');
+export const informationCrewName3_1 = document.querySelector(
+  '.information-crew-name3-1'
+);
 
 export const languageText = document.querySelector('.language-text');
 
