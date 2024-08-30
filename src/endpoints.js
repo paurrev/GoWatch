@@ -24,6 +24,8 @@ export const ENDPOINTS_MOVIE = {
     `https://api.themoviedb.org/3/movie/${id}/credits?api_key=${API_KEY}&language=es-MX`,
   getCertification: (id) =>
     `https://api.themoviedb.org/3/movie/${id}/release_dates?api_key=${API_KEY}`,
+  getProviders: (id) =>
+    `https://api.themoviedb.org/3/movie/${id}/watch/providers`,
 };
 
 export const ENDPOINTS_TV = {

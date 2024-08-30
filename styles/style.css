@@ -315,6 +315,21 @@ html .inactive {
   width: 100%;
   height: 100%;
   border-radius: 8px;
+  position: relative;
+  background-image: url('https://image.tmdb.org/t/p/original/usrFVMC4tbOzgIuojMo245QLtX2.jpg');
+}
+
+.section__backdrop-img::after {
+  content: '';
+  width: 100%;
+  height: 100%;
+  inset: 0;
+  position: absolute;
+  background: inherit;
+  filter: 
+    blur(60px) 
+    saturate(400%);
+  z-index: -1;
 }
 
 .trending,
@@ -665,13 +680,13 @@ footer {
 }
 
 .backdrop-div {
-  width: 90%;
+  width: 95%;
   display: inline-block;
   aspect-ratio: 16/9;
 }
 
 .backdrop-img {
-  border-radius: 0px 0px 16px 16px;
+  border-radius: 16px;
   width: 100%;
   height: 100%;
   object-fit: cover;
@@ -728,10 +743,15 @@ footer {
 }
 
 .watch-icons {
-  width: 45px;
-  height: 45px;
+  width: 50px;
+  height: 50px;
   margin-right: 16px;
   border-radius: 8px;
+  color: var(--color-on-primary);
+}
+
+.no-streaming{
+  color: var(--color-neutral-variant80);
 }
 
 .synopsis-title {
@@ -910,10 +930,9 @@ footer {
   justify-content: center;
   align-items: center;
   gap: 8px;
-
 }
 
-.information-duration span{
+.information-duration span {
   font-size: 20px;
 }
 

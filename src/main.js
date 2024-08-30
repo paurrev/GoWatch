@@ -54,12 +54,14 @@ import {
   informationDuration,
   informationCrew,
   informationBudget,
+  watchIconsContainer,
 } from './node.js';
 import { lazyLoadBillboard, LazyLoadHome } from './intersectionObserver.js';
 
 export let page = 1;
 
-const imgBaseURL = 'https://image.tmdb.org/t/p/w500/';
+const imgBaseURLOriginal = 'https://image.tmdb.org/t/p/original';
+const imgBaseURL = 'https://image.tmdb.org/t/p/w500';
 const imgBaseURLBig = 'https://image.tmdb.org/t/p/w1280';
 const imgBaseURLSmall = 'https://image.tmdb.org/t/p/w300';
 
@@ -559,6 +561,7 @@ function insertGetMoviesById(movie) {
 
   getGenresMovieId(movie);
   getRunTime(runTime);
+  getProviders(id, movie.title)
 }
 
 function insertReleaseDate(dateRelease) {
@@ -653,6 +656,7 @@ async function insertCrew(id) {
   const data = await response.json();
 
   const crewArray = data.crew;
+  console.log(crewArray)
 
   const director = crewArray.find((crew) => crew.job === 'Director');
 
@@ -734,6 +738,42 @@ function getGenresMovieId(data) {
     informationScore.style.gridColumn = '2 / 3';
     informationDuration.style.gridColumn = '3 / 4';
     informationCrew.style.gridColumn = '4 / 6';
+  }
+}
+
+async function getProviders(id, nameMovie) {
+  const url = ENDPOINTS_MOVIE.getProviders(id);
+  const response = await fetch(url, {
+    method: 'GET',
+    headers: {
+      accept: 'application/json',
+      Authorization: TOKEN_AUTH,
+    },
+  });
+
+  const data = await response.json();
+  console.log(data);
+
+  watchIconsContainer.innerHTML = '';
+
+  if (data.results.hasOwnProperty('EC')) {
+    const ecData = data.results.EC;
+    const watchArray = ecData.flatrate;
+    watchArray.forEach((provider) => {
+      const logoPath = provider.logo_path;
+      const logoName = provider.provider_name;
+
+      const imgProvider = document.createElement('img');
+      imgProvider.src = `${imgBaseURLOriginal}${logoPath}`;
+      imgProvider.classList = 'watch-icons';
+      imgProvider.alt = logoName;
+      watchIconsContainer.appendChild(imgProvider);
+    });
+  } else {
+    const spanNoStream = document.createElement('span');
+    spanNoStream.innerHTML = `${nameMovie} no tiene proveedores de streaming disponibles`;
+    spanNoStream.className = 'no-streaming';
+    watchIconsContainer.appendChild(spanNoStream);
   }
 }
 
