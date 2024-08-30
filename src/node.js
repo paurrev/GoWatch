@@ -134,6 +134,8 @@ export const movieDetailSection = document.querySelector(
 
 export const backdropMovie = document.querySelector('.backdrop-movie');
 
+export const divBackdrop = document.querySelector('.backdrop-div');
+
 export const titleMovieContainer = document.querySelector(
   '.title-movie_container'
 );

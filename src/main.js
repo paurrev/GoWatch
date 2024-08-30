@@ -55,6 +55,7 @@ import {
   informationCrew,
   informationBudget,
   watchIconsContainer,
+  divBackdrop,
 } from './node.js';
 import { lazyLoadBillboard, LazyLoadHome } from './intersectionObserver.js';
 
@@ -522,34 +523,38 @@ export async function getMovieById(id) {
 
   const data = await response.json();
 
-  console.log(data);
-  backdropMovie.innerHTML = '';
+  divBackdrop.innerHTML = '';
+  
   insertGetMoviesById(data);
 }
 
 function insertGetMoviesById(movie) {
+  certificationText.innerHTML = '';
+  titleMovieName.innerHTML = '';
   const budget = movie.budget;
   const revenue = movie.revenue;
   const id = movie.id;
   const language = movie.original_language;
   const runTime = movie.runtime;
 
-  const divBackdrop = document.createElement('div');
-  divBackdrop.classList.add('backdrop-div');
-
   const imgBackdrop = document.createElement('img');
+  imgBackdrop.innerHTML = ''
 
   imgBackdrop.src = `${imgBaseURLBig}${movie.backdrop_path}`;
   imgBackdrop.className = 'backdrop-img';
   imgBackdrop.alt = `Backdrop of ${movie.title}`;
   divBackdrop.appendChild(imgBackdrop);
-  backdropMovie.appendChild(divBackdrop);
+  backdropMovie.appendChild(divBackdrop); 
 
   const releaseDate = movie.release_date;
   const year = releaseDate.split('-')[0];
   titleMovieName.innerText = movie.title;
   titleMovieYear.innerText = `(${year})`;
-  synopsisText.innerText = movie.overview;
+  if(movie.overview){
+    synopsisText.innerText = movie.overview;
+  } else{
+    synopsisText.innerText = 'No hay sinopsis disponible';
+  }
 
   insertReleaseDate(releaseDate);
   getCertification(id);
@@ -588,7 +593,6 @@ async function getCertification(id) {
 }
 
 function insertCertifications(data) {
-  certificationText.innerHTML = '';
   const allCertifications = data.results.find(
     (cert) => cert.iso_3166_1 === 'US'
   );
@@ -656,7 +660,6 @@ async function insertCrew(id) {
   const data = await response.json();
 
   const crewArray = data.crew;
-  console.log(crewArray)
 
   const director = crewArray.find((crew) => crew.job === 'Director');
 
@@ -752,7 +755,6 @@ async function getProviders(id, nameMovie) {
   });
 
   const data = await response.json();
-  console.log(data);
 
   watchIconsContainer.innerHTML = '';
 

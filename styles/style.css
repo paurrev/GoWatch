@@ -677,7 +677,8 @@ footer {
   display: flex;
   place-content: center;
   color: white;
-}
+  width: inherit;
+  aspect-ratio: 16/9;}
 
 .backdrop-div {
   width: 95%;

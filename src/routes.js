@@ -41,6 +41,11 @@ import {
   categoriesContainer,
   nowPlayingContainerMain,
   topRatedContainerMain,
+  backdropMovie,
+  titleMovieName,
+  titleMovieYear,
+  synopsisText,
+  watchIconsContainer,
 } from './node.js';
 
 let page = 1;
@@ -225,6 +230,8 @@ function categoriesPage() {
 }
 
 function movieDetailsPage() {
+
+  
   indexSection.classList.add('inactive');
   sectionNowPlaying.classList.add('inactive');
   categoriesSection.classList.add('inactive');
@@ -244,8 +251,14 @@ function movieDetailsPage() {
   navbarMenuVertical.classList.add('inactive');
   //['#movie=', '#81381'];
   const [_, movieId] = location.hash.split('=');
-  getMovieById(movieId);
+  backdropMovie.style.aspectRadio = '16/9';
+  backdropMovie.innerHTML = '';
+  titleMovieName.innerHTML = '';
+  titleMovieYear.innerHTML = '';
+  synopsisText.innerHTML = '';
+  watchIconsContainer.innerHTML = '';
   getGenresMovies();
+  getMovieById(movieId);
 }
 
 function trendsPage() {}
